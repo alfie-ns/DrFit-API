@@ -1,0 +1,11 @@
+# Swift Frontend Notes
+- [ ] Clear GPT conversation for specific user
+- [ ] Visually appealing
+- [ ] Responsive/stylish disappearing text to look
+- [ ] Rounded corners
+- [ ] Sidebar/footer populated with different functional things of the app
+- [ ] Quick actions(create workout, create meal e.g.)
+- [ ] Incorporate async functionality  
+- [ ] Make user=user_id for profile creation
+- [ ] Asyncronously call openai and then notify user when got response
+- [ ] Create a way to tick off the checkboxes generated from the initial plan
