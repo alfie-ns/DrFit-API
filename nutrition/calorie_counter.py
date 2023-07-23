@@ -1,4 +1,3 @@
-from .nutrition_plan import get_age, get_weight, get_height, get_gender
 from response.calculations import calculate_calorific_needs, calculate_macronutrient_split
 import requests, json, os
 from dotenv import load_dotenv
