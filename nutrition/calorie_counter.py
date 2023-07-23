@@ -1,10 +1,41 @@
 from .nutrition_plan import get_age, get_weight, get_height, get_gender
-from response.calculations import calculate_calorific_needs
+from response.calculations import calculate_calorific_needs, calculate_macronutrient_split
 import requests, json, os
 from dotenv import load_dotenv
 from accounts.models import UserProfile
 from .models import FoodDiaryEntry
 load_dotenv()
+
+
+def get_age(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    age = user_profile.age
+    return age
+
+def get_weight(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    weight = user_profile.weight
+    return weight
+
+def get_height(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    height = user_profile.height
+    return height
+
+def get_gender(request):    
+    user_profile = UserProfile.objects.get(user=request.user)
+    gender = user_profile.gender
+    return gender
+
+def calorific_needs(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    daily_calorific_needs = calculate_calorific_needs(user_profile)
+    return daily_calorific_needs
+
+def macros(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    macros = calculate_macronutrient_split(user_profile)
+    return macros
 
 
 def get_fooditem(request):  
@@ -45,7 +76,7 @@ def get_fooditem(request):
         return {'error': 'We are currently experiencing heavy traffic for getting food items. Please try again later.'}
 
     # Check if food item was found
-    if 'parsed' in data and data['parsed']: # If there is one food item found  
+    if 'parsed' in data and data['parsed']: # If there is a food item found  
         food = data['parsed'][0]['food'] # Get the food item
         food_name = food['label'] # Get the name of the food item
         food_calories = food['nutrients']['ENERC_KCAL'] # Get calories from food item
@@ -67,7 +98,7 @@ def create_food_diary_entry(request):
         food_item_query = data.get('food_item')
         meal_type = data.get('meal_type')
 
-        # Use get_food_details to retrieve the food's name and calorie count from the Edamam API
+        # Use get_fooditem to retrieve the food's name and calorie count from the Edamam API
         food_name, food_calories = get_fooditem(food_item_query)
 
         if food_name is None or food_calories is None:
