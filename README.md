@@ -38,6 +38,7 @@
 - [x] I have recently started making the initial plan and now need the make the get request(find where userprofile is created and then call the function that makes initial plan inside models.py?, then get)
 - [x] I'm trying to get the initial plan to put it in the diary app
 - [ ] I'm trying to make the calorie counter, now I need to implement functionality for the food item to be taken off the daily calorific needs
+- [ ] Make sure the personal youtube prompter is working
 
 ## Dad
 - [ ] I'm trying to make the calorie counter, now I need to implement functionality for the food item to be taken off the daily calorific needs
