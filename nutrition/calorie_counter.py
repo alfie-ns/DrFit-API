@@ -3,6 +3,7 @@ import requests, json, os
 from dotenv import load_dotenv
 from accounts.models import UserProfile
 from .models import FoodDiaryEntry
+from datetime import datetime
 load_dotenv()
 
 
@@ -16,6 +17,7 @@ def get_fooditem(request, food_item):
     # Get food item requested from app
     data = json.loads(request.body)
     food_item = food_item
+    
 
     # Get user's calorific needs
     user_profile = UserProfile.objects.get(user=request.user)
@@ -66,6 +68,7 @@ def create_food_diary_entry(request):
         data = json.loads(request.body)
         food_item_query = data.get('food_item')
         meal_type = data.get('meal_type')
+        date_time = datetime.now()
 
         # Use get_fooditem to retrieve the food's name and calorie count from the Edamam API
         response = get_fooditem(request, food_item_query)
@@ -94,6 +97,7 @@ def create_food_diary_entry(request):
             meal_type=meal_type,
             calories=food_calories
         )
+        print(f"Food diary entry created successfully for {food_name} at {date_time}")
 
         return {'message': 'Food diary entry created successfully.'}
     else:

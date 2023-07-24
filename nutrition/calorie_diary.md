@@ -9,7 +9,7 @@
   "calories": 230
 }
 
-could possibly returns calorie summary for the date specified in add entry: eg.
+- [ ] could possibly returns calorie summary for the date specified in add entry: eg.
 
 { "date": 20230724,
   "calories_eaten": 1234,
