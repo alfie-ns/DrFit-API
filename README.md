@@ -76,7 +76,8 @@
 
 
 - [x] BRAIN NUTRIENTS YOUTUBE PROMPT: https://www.youtube.com/watch?v=E7W4OQfJWdw&t=1880s
-- [ ] Allow user to choose what transcript_prompt for the AI, regardless it will read over the entire video
+- [x] Allow user to choose what transcript_prompt for the AI, regardless it will read over the entire video
+- [ ] Speed up youtube sumarization
 - [ ] Find better way to search for food items
 - [ ] Make gpt know everything that's happening in the app
 - [ ] OpenAI edamam food-database specification ???
