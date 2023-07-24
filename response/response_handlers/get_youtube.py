@@ -91,6 +91,7 @@ def get_youtube(request):
         )
         response = res['choices'][0]['message']['content']
         responses.append(response)
+        conversation.history.append({'role': 'assistant', 'content': response})
     responses = "<br><br>".join(responses)
     print(f"TIME TAKEN FOR VIDEO TRANSCRIPT GENERATION: {time.time() - start_time1}") # End the timer
 
