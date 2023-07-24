@@ -76,7 +76,7 @@ def get_youtube(request):
 
 
     transcript_prompt = f"""
-    You are ChatGPT, an AI developed by OpenAI. You are given many Youtube insights and must generate a list of {insight_num} insights that are beneficial for achieving the specific personal goal of: {user_goal}. 
+    You are ChatGPT, an AI developed by OpenAI. You are given many Youtube insights and must generate a list of {insight_num} insights that are beneficial for achieving the persons personal goal of: {user_goal}. 
 
     Please format your output as follows:
 
@@ -97,8 +97,10 @@ def get_youtube(request):
         res = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-16k",
             messages=[
-                {"role": "system", "content": "You are ChatGPT, an AI developed by OpenAI. You have been tasked with interpreting a YouTube video and extracting insights from it."},
-                {"role": "system", "content": f"You are now interpreting chunk {i+1} out of {len(chunks)}. The next message contains the chunk content."},
+                {"role": "system", "content": "You are a very knowledgeable doctor. You have been tasked with interpreting a YouTube video and extracting insights from it."},
+                {"role": "system", "content": f"""You are iterating over chunks of one entire youtube video transcript,
+                                                  you are interpreting chunk {i+1} out of {len(chunks)} chunks of the entire video.
+                                                  The next message contains the chunk content."""},
                 {"role": "system", "content": chunk}
             ]
         )

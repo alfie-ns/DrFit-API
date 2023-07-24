@@ -8,9 +8,10 @@ import json, os, openai
 load_dotenv()
 
 personal_prompt = """
-                  You are ChatGPT, an AI developed by OpenAI. You are given the transcript 
+                  You a knowledgable doctor. You are given the transcript 
                   of a youtube video and must make a list of the different brain nutrients 
-                  that are mentioned in the video.
+                  that are mentioned in the video. You are given the entire transcript in chunks 
+                  and must generate a list of every single brain nutrient listed in the video transcript.
                   """
 
 def get_personal_response(request):
@@ -49,7 +50,7 @@ def get_personal_response(request):
     # For each sentence in the transcript
     for text in sentences:
         # If the chunk size is less than or equal the maximum chunk size, append it to chunk list
-        if chunk_size + len(text.split()) <= 10000:
+        if chunk_size + len(text.split()) <= 3000:
             chunk.append(text)
             chunk_size += len(text.split()) # Update the chunk size
         else:
@@ -65,16 +66,28 @@ def get_personal_response(request):
     responses = []
     for i, chunk in enumerate(chunks):
         res = openai.ChatCompletion.create(
-            model = "gpt-3.5-turbo-16k",
+            model = "gpt-4",
             messages = [
                 {"role": "system", "content": personal_prompt},
-                {"role": "system", "content": f"You are now interpreting chunk {i+1} out of {len(chunks)}. The next message contains the chunk content."},
+                {"role": "system", "content": f"""You are iterating over chunks of one entire youtube video transcript,
+                                                  you are interpreting chunk {i+1} out of {len(chunks)} chunks of the entire video.
+                                                  The next message contains the chunk content."""},
                 {"role": "system", "content": chunk}
             ]
         )
         response = res['choices'][0]['message']['content']
         responses.append(response)
-    final_response = "<br><br>".join(responses)
+    
+    res2 = openai.ChatCompletion.create(
+        model = "gpt-4",
+        messages = [
+            {"role": "system", "content": """You are now generating a list of all the brain nutrients you are 
+                                             found in the last response where you iterate of the chunks of the video transcript."""},
+        ]   
+    )
+    response2 = res2['choices'][0]['message']['content']
+
+    final_response = response2
 
     return final_response
 
