@@ -38,6 +38,7 @@
 - [ ] I'm trying to make the calorie counter, now I need to implement functionality for the food item to be taken off the daily calorific needs
 
 ## Dad
+- [ ] I'm trying to make the calorie counter, now I need to implement functionality for the food item to be taken off the daily calorific needs
 - [ ] Implementing checkboxex
 - [ ] Implementing strava api
 
@@ -71,7 +72,7 @@
 
 
 
-- [ ] BRAIN NUTRIENTS YOUTUBE PROMPT: https://www.youtube.com/watch?v=E7W4OQfJWdw&t=1880s
+- [x] BRAIN NUTRIENTS YOUTUBE PROMPT: https://www.youtube.com/watch?v=E7W4OQfJWdw&t=1880s
 - [ ] Find better way to search for food items
 - [ ] Make gpt know everything that's happening in the app
 - [ ] OpenAI edamam food-database specification ???
