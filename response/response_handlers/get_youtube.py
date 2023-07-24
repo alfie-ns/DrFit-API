@@ -74,21 +74,6 @@ def get_youtube(request):
     # Initialize the conversation
     conversation, created = Conversation.objects.get_or_create(user=user_profile.user)
 
-
-    transcript_prompt = f"""
-    You are ChatGPT, an AI developed by OpenAI. You are given many Youtube insights and must generate a list of {insight_num} insights that are beneficial for achieving the persons personal goal of: {user_goal}. 
-
-    Please format your output as follows:
-
-    <b>{insight_num} Insights for achieving your personal goal of: {user_goal}:</b>
-    [ 
-    - Insight 1 
-    ...
-    ]
-
-    Be sure to generate exactly {insight_num} insights that are relevant to the video content. After you finish listing the {insight_num} insights, do not generate any more text. STOP AFTER THE LIST.
-    """
-
     # Start the timer
     start_time1 = time.time()
     # Get the AI's interpretations of the chunks
@@ -97,11 +82,11 @@ def get_youtube(request):
         res = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-16k",
             messages=[
-                {"role": "system", "content": "You are a very knowledgeable doctor. You have been tasked with interpreting a YouTube video and extracting insights from it."},
+                {"role": "system", "content": "You are a very knowledgeable doctor. You have been tasked with interpreting and summarizing a YouTube video and extracting summarized insights from it."},
                 {"role": "system", "content": f"""You are iterating over chunks of one entire youtube video transcript,
                                                   you are interpreting chunk {i+1} out of {len(chunks)} chunks of the entire video.
                                                   The next message contains the chunk content."""},
-                {"role": "system", "content": chunk}
+                {"role": "system", "content": f"Chunk {i+1}: {chunk}"}
             ]
         )
         response = res['choices'][0]['message']['content']
@@ -114,7 +99,20 @@ def get_youtube(request):
     final_res = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": transcript_prompt},
+            {"role": "system", "content": f"""
+                You are ChatGPT, an AI developed by OpenAI. You are given many insights and must generate a list of {insight_num} insights. 
+
+                Please format your output as follows:
+
+                <b>{insight_num} Insights for achieving your personal goal of: {user_goal}:</b>
+                [ 
+                - Insight 1 
+                ...
+                ]
+
+                Be sure to generate exactly {insight_num} insights that are relevant to the video content. After you finish listing the {insight_num} insights, do not generate any more text. STOP AFTER THE LIST.
+                """
+            },
             {"role": "system", "content": responses}
         ]
     )

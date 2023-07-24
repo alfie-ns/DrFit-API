@@ -7,20 +7,22 @@ import json, os, openai
 
 load_dotenv()
 
-personal_prompt_brain = """
-                  You a knowledgable doctor. You are given the transcript 
-                  of a youtube video and must make a list of the different brain nutrients 
-                  that are mentioned in the video. You are given the entire transcript in chunks 
-                  and must generate a list of every single brain nutrient listed in the video transcript.
-                  """
-
 def get_personal_response(request):
-
+    '''This function takes in a youtube video url and a
+       prompt wish from the user and returns a response'''
     
 
     data = json.loads(request.body.decode('utf-8'))
     url = data.get('url')
-    prompt_wish = data.get('wish')
+    prompt_wish = data.get('wish') 
+    
+    if prompt_wish == None:
+        prompt_wish =  """
+                        You a knowledgable doctor. You are given the transcript 
+                        of a youtube video and must make a list of the different brain nutrients 
+                        that are mentioned in the video. You are given the entire transcript in chunks 
+                        and must generate a list of every single brain nutrient listed in the video transcript.
+                       """
 
     # Extract video Id from url
     query = urlparse(url)
@@ -75,7 +77,7 @@ def get_personal_response(request):
         res = openai.ChatCompletion.create(
             model = "gpt-4",
             messages = [
-                {"role": "system", "content": personal_prompt},
+                {"role": "system", "content": f"Your task: {personal_prompt}"},
                 {"role": "system", "content": f"""You are iterating over chunks of one entire youtube video transcript,
                                                   you are interpreting chunk {i+1} out of {len(chunks)} chunks of the entire video.
                                                   The next message contains the chunk content."""},
