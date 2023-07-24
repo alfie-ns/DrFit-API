@@ -6,7 +6,7 @@ from .models import FoodDiaryEntry
 load_dotenv()
 
 
-def get_fooditem(request):  
+def get_fooditem(request, food_item):  
 
     # Get variables needed for API request
     edamam_app_id = "45be5c78"
@@ -15,7 +15,7 @@ def get_fooditem(request):
 
     # Get food item requested from app
     data = json.loads(request.body)
-    food_item = data.get('food_item')
+    food_item = food_item
 
     # Get user's calorific needs
     user_profile = UserProfile.objects.get(user=request.user)
@@ -62,12 +62,27 @@ def get_fooditem(request):
     
 def create_food_diary_entry(request):
     if request.method == 'POST':
+        #If POST request, get food_item_query and meal_type from app
         data = json.loads(request.body)
         food_item_query = data.get('food_item')
         meal_type = data.get('meal_type')
 
         # Use get_fooditem to retrieve the food's name and calorie count from the Edamam API
-        food_name, food_calories = get_fooditem(food_item_query)
+        response = get_fooditem(request, food_item_query)
+
+        # Check if response is a list (meaning multiple food items found)
+        if isinstance(response, list):
+            # Do something appropriate here, such as selecting the first item, or sending the list back to the user for selection
+            # For now, let's select the first item
+            food_name = response[0]['name']
+            food_calories = response[0]['calories']
+        elif 'error' in response:
+            # If there's an error, return the error
+            return response
+        else:
+            # If it's a dictionary (but not an error), proceed as before
+            food_name = response['name']
+            food_calories = response['calories']
 
         if food_name is None or food_calories is None:
             return {'error': f"No information found for {food_item_query}"}

@@ -31,6 +31,8 @@
 - [ ] Nutritional calorie counter diary
 - [x] Change database password and put in .env file
 
+## Calorie counter idea
+
 
 ## Diary
 - [x] I have recently started making the initial plan and now need the make the get request(find where userprofile is created and then call the function that makes initial plan inside models.py?, then get)
