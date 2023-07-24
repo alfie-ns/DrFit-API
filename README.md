@@ -42,6 +42,7 @@
 - [ ] Implementing strava api
 
 ## Plan
+
 - [x] Create .env file
 - [x] Get OpenAI API Working
 - [x] Get PostMan Working
@@ -67,6 +68,10 @@
 - [x] Create initial plan
 - [x] Create workout_plan generator
 - [x] Implement calorie counter diary(get calorific needs of certain food items)
+
+
+
+- [ ] BRAIN NUTRIENTS YOUTUBE PROMPT: https://www.youtube.com/watch?v=E7W4OQfJWdw&t=1880s
 - [ ] Find better way to search for food items
 - [ ] Make gpt know everything that's happening in the app
 - [ ] OpenAI edamam food-database specification ???

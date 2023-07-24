@@ -10,6 +10,7 @@ from .response_handlers.get_response import get_response
 from .response_handlers.get_youtube import get_youtube
 from .response_handlers.get_workout import get_workout
 from .response_handlers.get_initialplan import get_initialplan
+from .response_handlers.personal_response import get_personal_response
 
 
 
@@ -36,5 +37,13 @@ class GetWorkout(APIView):
     def post(self, request):
         # Parse JSON data from the request body
         response = get_workout(request)
+        # Return response to app
+        return Response({'response': response}, status=status.HTTP_200_OK)
+    
+class PersonalResponse(APIView):
+    @csrf_exempt
+    def post(self, request):
+        # Parse JSON data from the request body
+        response = get_personal_response(request)
         # Return response to app
         return Response({'response': response}, status=status.HTTP_200_OK)
