@@ -2,7 +2,7 @@
 
 ## get_personalised_response
 - [ ] Check if it reads over the entire transcript
-- [ ] Implement personalised question post request(prompt_wish json)
+- [ ] Implement personalised question post request(prompt_wish json, get chatgpt help?)
 
 ## get_workout
 - [ ] Hook up to API for workout/exercise generation
