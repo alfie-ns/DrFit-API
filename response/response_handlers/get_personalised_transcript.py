@@ -43,7 +43,7 @@ def get_personalised_transcript(request):
     # Extract the sentences from the transcript
     sentences = [entry['text'] for entry in transcript]
 
-    # Split the sentences into chunks of approximately {insight_num000 tokens each
+    # Split the sentences into chunks of approximately {insight_count000 tokens each
     chunks = []
     chunk = []
     chunk_size = 0

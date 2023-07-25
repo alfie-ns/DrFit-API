@@ -17,10 +17,10 @@ def get_youtube(request):
     # Parse JSON data from the request body
     data = json.loads(request.body.decode('utf-8'))
     url = data.get('url')
-    insight_num = data.get('insight_num')
+    insight_count = data.get('insight_count')
 
-    if insight_num == None: # If not insight number is specified, default to 5
-        insight_num = 5
+    if insight_count == None: # If not insight number is specified, default to 5
+        insight_count = 5
 
     # Extract video ID from URL
     query = urlparse(url)
@@ -46,7 +46,7 @@ def get_youtube(request):
     # Extract the sentences from the transcript
     sentences = [entry['text'] for entry in transcript]
 
-    # Split the sentences into chunks of approximately {insight_num000 tokens each
+    # Split the sentences into chunks of approximately {insight_count000 tokens each
     chunks = []
     chunk = []
     chunk_size = 0
@@ -101,17 +101,17 @@ def get_youtube(request):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": f"""
-                You are ChatGPT, an AI developed by OpenAI. You are given many insights and must generate a list of {insight_num} insights. 
+                You are ChatGPT, an AI developed by OpenAI. You are given many insights and must generate a list of {insight_count} insights. 
 
                 Please format your output as follows:
 
-                <b>{insight_num} Insights for achieving your personal goal of: {user_goal}:</b>
+                <b>{insight_count} Insights for achieving your personal goal of: {user_goal}:</b>
                 [ 
                 - Insight 1 
                 ...
                 ]
 
-                Be sure to generate exactly {insight_num} insights that are relevant to the video content. After you finish listing the {insight_num} insights, do not generate any more text. STOP AFTER THE LIST.
+                Be sure to generate exactly {insight_count} insights that are relevant to the video content. After you finish listing the {insight_count} insights, do not generate any more text. STOP AFTER THE LIST.
                 """
             },
             {"role": "system", "content": responses}
