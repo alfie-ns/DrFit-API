@@ -78,7 +78,6 @@
 - [x] BRAIN NUTRIENTS YOUTUBE PROMPT: https://www.youtube.com/watch?v=E7W4OQfJWdw&t=1880s
 - [ ] Get gpt read over the entire youtube video, then implement a prompt for the user to ask for specific insights
 - [ ] Speed up youtube sumarization
-- [ ] Find better way to search for food items
 - [ ] Make gpt know everything that's happening in the app
 - [ ] OpenAI edamam food-database specification ???
 - [ ] Implement milestones

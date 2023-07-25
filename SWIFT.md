@@ -9,3 +9,4 @@
 - [ ] Make user=user_id for profile creation
 - [ ] Asyncronously call openai and then notify user when got response
 - [ ] Create a way to tick off the checkboxes generated from the initial plan
+- [ ] Find better way to search for food items

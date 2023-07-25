@@ -7,6 +7,7 @@ from accounts.models import UserProfile
 from .models import FoodDiaryEntry
 from datetime import datetime
 
+# Load the environment variables
 load_dotenv()
 
 
