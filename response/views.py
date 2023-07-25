@@ -9,7 +9,7 @@ from rest_framework import status
 from .response_handlers.get_response import get_response
 from .response_handlers.get_youtube import get_youtube
 from .response_handlers.get_workout import get_workout
-from .response_handlers.get_initialplan import get_initialplan
+from .response_handlers.get_initial_plan import get_initial_plan
 from .response_handlers.get_personalised_transcript import get_personalised_transcript
 
 

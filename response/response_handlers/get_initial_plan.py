@@ -15,8 +15,8 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 model="gpt-4"
 
 # Get initial plan function
-def get_initialplan(user_profile):
-   print("ENTERED GET_INITIALPLAN FUNCTION")
+def get_initial_plan(user_profile):
+   print("ENTERED get_initial_plan FUNCTION")
 
    # Get user goal description
    detailed_goal = goal_descriptions[user_profile.goal]

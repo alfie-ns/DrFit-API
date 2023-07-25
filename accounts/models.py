@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
-from response.response_handlers.get_initialplan import get_initialplan
+from response.response_handlers.get_initial_plan import get_initial_plan
 
 
 class UserProfile(models.Model):
@@ -120,7 +120,7 @@ def send_welcome_email_on_user_create(sender, instance, created, **kwargs):
 @receiver(post_save, sender=UserProfile)
 def send_initialplan_on_user_create(sender, instance, created, **kwargs):
     if created:
-        initial_plan = get_initialplan(instance) # Get initial plan
+        initial_plan = get_initial_plan(instance) # Get initial plan
 
         instance.initial_plan = initial_plan # Set initial plan
         instance.save() # Save initial plan
