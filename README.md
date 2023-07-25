@@ -37,7 +37,7 @@
 ## Diary
 - [x] I have recently started making the initial plan and now need the make the get request(find where userprofile is created and then call the function that makes initial plan inside models.py?, then get)
 - [x] I'm trying to get the initial plan to put it in the diary app
-- [ ] I'm trying to make the calorie counter, now I need to implement functionality for the food item to be taken off the daily calorific needs
+- [ ] food calorie diary: implement a way to search for food items and then add them to the diary which minus of the daily calorific needs
 - [ ] Make sure the personal youtube prompter is working
 
 ## Dad
@@ -76,7 +76,7 @@
 
 
 - [x] BRAIN NUTRIENTS YOUTUBE PROMPT: https://www.youtube.com/watch?v=E7W4OQfJWdw&t=1880s
-- [x] Allow user to choose what transcript_prompt for the AI, regardless it will read over the entire video
+- [ ] Get gpt read over the entire youtube video, then implement a prompt for the user to ask for specific insights
 - [ ] Speed up youtube sumarization
 - [ ] Find better way to search for food items
 - [ ] Make gpt know everything that's happening in the app
