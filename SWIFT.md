@@ -19,3 +19,6 @@
 - [ ] Voted top comment functionality similar to stack overflow
 - [ ] Lots of advice
 - [ ] Hactic mode if someone rests to much
+- [ ] Add a way to add a new exercise
+- [ ] Add a way to add a new meal idea
+- [ ] push notifications is someone is trying to acheive a goal
