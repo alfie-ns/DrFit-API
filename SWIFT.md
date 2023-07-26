@@ -16,6 +16,6 @@
 - [ ] Context menus: https://swiftanytime.com/blog/contextmenu-in-swiftui
 - [ ] Customize layout
 - [ ] Question boxes for e.g. form, nutrition and reddit type questions
-- [ ] voted top comment functionality similar to stack overflow
-- [ ] lots of advice
-- [ ] hactic mode if someone rests to much
+- [ ] Voted top comment functionality similar to stack overflow
+- [ ] Lots of advice
+- [ ] Hactic mode if someone rests to much
