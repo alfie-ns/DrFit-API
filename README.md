@@ -86,6 +86,7 @@
 - [x] Create Inital-plan with steps 
 - [ ] Allow the steps to be ticked off
 - [x] Bodyfat percentage as optional field
+- [ ] anti-cheating functonality
 - [ ] If error with function call try again until it's worked OR give up after 5 attempts and display error
 - [ ] Clear GPT conversation for specific user
 - [ ] SORT OUT THE MET VALUE FOR RUNNING WITH SPEED = DISTANCE/TIME. CONVERT MILES AND KM TO METRES
