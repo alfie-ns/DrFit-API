@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .calorie_counter import get_food_item, create_food_diary_entry, get_calorie_summary, get_foods_eaten
+from .calorie_diary.calorie_counter import get_food_item, create_food_diary_entry, get_calorie_summary, get_foods_eaten
 import json
 
 class GetFoodItem(APIView):
