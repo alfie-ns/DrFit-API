@@ -15,3 +15,4 @@
 - [ ] Find better way to search for food items
 - [ ] Context menus: https://swiftanytime.com/blog/contextmenu-in-swiftui
 - [ ] Customize layout
+- [ ] Questijd boxes about form e.g.
