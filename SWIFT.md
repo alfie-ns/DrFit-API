@@ -10,3 +10,4 @@
 - [ ] Asyncronously call openai and then notify user when got response
 - [ ] Create a way to tick off the checkboxes generated from the initial plan
 - [ ] Find better way to search for food items
+- [ ] Context menus: https://swiftanytime.com/blog/contextmenu-in-swiftui
