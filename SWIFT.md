@@ -16,5 +16,6 @@
 - [ ] Context menus: https://swiftanytime.com/blog/contextmenu-in-swiftui
 - [ ] Customize layout
 - [ ] Questijd boxes about form e.g.
-- [ ] top comment functionslify 
-- [ ] lots of advicr 
+- [ ] voted top comment functionality similar to stack overflow
+- [ ] lots of advice
+- [ ] hactic mode if someone rests to much
