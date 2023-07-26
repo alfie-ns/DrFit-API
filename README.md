@@ -19,7 +19,7 @@
 #### Postgres
 ##### Look in database
 - psql -h localhost -U ANurs -d django-db 
-- (password: root)
+- (password on .env)
 
 
 # Phone notes
