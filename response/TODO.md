@@ -9,4 +9,4 @@
 
 ## get_initial_plan
 - [ ] Make list of checkboxes for initial plan, that the user checks off as they go
-- [ ] Macro nutrient 
+- [ ] Macro nutrient calculator.com
