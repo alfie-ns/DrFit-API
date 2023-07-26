@@ -15,7 +15,7 @@
 - [ ] Find better way to search for food items
 - [ ] Context menus: https://swiftanytime.com/blog/contextmenu-in-swiftui
 - [ ] Customize layout
-- [ ] Questijd boxes about form e.g.
+- [ ] Question boxes for e.g. form, nutrition and reddit type questions
 - [ ] voted top comment functionality similar to stack overflow
 - [ ] lots of advice
 - [ ] hactic mode if someone rests to much
