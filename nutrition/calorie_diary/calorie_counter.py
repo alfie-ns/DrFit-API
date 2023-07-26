@@ -4,7 +4,7 @@ from django.db.models import Sum
 import requests, json, os
 from dotenv import load_dotenv
 from accounts.models import UserProfile
-from ..models import FoodDiaryEntry
+from ..models import FoodDiaryEntry # Go backwards twice
 from datetime import datetime
 
 # Load the environment variables
