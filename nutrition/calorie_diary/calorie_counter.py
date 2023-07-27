@@ -10,7 +10,57 @@ from datetime import datetime
 # Load the environment variables
 load_dotenv()
 
+def get_food_search(request):
+    edamam_app_id = "45be5c78"
+    edamam_app_key = os.getenv("EDAMAM_API_KEY")
+    url = "https://api.edamam.com/api/food-database/v2/parser"
 
+    # Get food item requested from app
+    data = json.loads(request.body)
+    food_item = data.get('food_item')
+
+    # If food item is not provided, return error
+    if not food_item:
+        return {'error': "No food item provided"}
+    
+    # Send Edamam-API GET request
+    response = requests.get(
+        url, 
+        params={
+            'ingr': food_item,
+            'app_id': edamam_app_id, 
+            'app_key': edamam_app_key
+        }
+    )
+
+    # Parse response which means converting it to a dictionary
+    data = response.json()
+
+    # Check for usage limit error
+    if data.get('status') == 'error' and data.get('message') == 'Usage limits are exceeded':
+        return {'error': 'We are currently experiencing heavy traffic for getting food items. Please try again later.'}
+    
+    # Check for usage limit error
+    if data.get('status') == 'error' and data.get('message') == 'Usage limits are exceeded':
+        return {'error': 'We are currently experiencing heavy traffic for getting food items. Please try again later.'}
+
+    # Check if food item was found
+    if 'parsed' in data and data['parsed']: # If there is a food item found  
+        food = data['parsed'][0]['food'] # Get the food item
+        food_name = food['label'] # Get the name of the food item
+        food_calories = food['nutrients']['ENERC_KCAL'] # Get calories from food item
+        return {'name': food_name, 'calories': food_calories}
+    elif 'hints' in data and data['hints']: # If there are multiple food items found
+        results = [] # Create empty list to store hint results
+        for hint in data['hints']: # Loop through hints provided
+            food = hint['food'] # Get the food item
+            food_name = food['label'] # Get the name of the food item
+            food_calories = food['nutrients']['ENERC_KCAL'] # Get calories from food item
+            results.append({'name': food_name, 'calories': food_calories}) # Append food item to results list
+        return results
+    else:
+        return {'error': f"No information found for {food_item}"}
+    
 def get_food_item(request, food_item):  
 
     # Get variables needed for API request
