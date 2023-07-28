@@ -22,3 +22,4 @@
 - [ ] Add a way to add a new exercise
 - [ ] Add a way to add a new meal idea
 - [ ] push notifications is someone is trying to acheive a goal
+- [ ] App store icon: hotspot, fastlane, appscreens
