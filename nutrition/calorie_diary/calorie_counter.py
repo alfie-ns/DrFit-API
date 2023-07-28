@@ -1,6 +1,7 @@
 from response.calculations import calculate_calorific_needs, calculate_macronutrient_split
 from django.utils.dateparse import parse_date
 from django.db.models import Sum
+from django.db import transaction
 import requests, json, os
 from dotenv import load_dotenv
 from accounts.models import UserProfile
@@ -9,6 +10,7 @@ from datetime import datetime
 
 # Load the environment variables
 load_dotenv()
+
 
 def get_food_search(request):
     edamam_app_id = "45be5c78"
@@ -121,7 +123,7 @@ def get_food_item(request, food_item):
         return {'error': f"No information found for {food_item}"}
     
 def get_calorie_summary(request, date_str):
-    ''''This function takes in a date_time and 
+    ''''This function takes in a date and 
         returns a calorie summary for that day'''
     
     if request.method == "POST":
@@ -140,7 +142,8 @@ def get_calorie_summary(request, date_str):
         # Filter food diary entries by date and calculate the total calories consumed
         calories_eaten = FoodDiaryEntry.objects.filter(
             user=request.user,
-            date_time__date=date).aggregate(Sum('calories'))['calories__sum'] or 0
+            date=date).aggregate(Sum('calories'))['calories__sum'] or 0
+        print(f"Calories eaten on {date} = {calories_eaten}")
         
         # Calculate the remaining calories
         remaining_calories = int(daily_calorific_needs) - calories_eaten
@@ -155,8 +158,42 @@ def get_calorie_summary(request, date_str):
     else:
         return {'error': 'Invalid request method.'}
 
+def manual_create_food_diary_entry(request):
+    '''This function takes in a food item, calories, meal type and date
+        and manually creates a food diary entry for the user'''
+    
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        food_item_name = data.get('food_item_name')
+        meal_type = data.get('meal_type')
+        calories = data.get('calories')
+        date_str = data.get('date')  # get the date from the request
+        if date_str:
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()  # convert the date string to a date
+        else:
+            date = datetime.now().date()  # use today's date
+
+        FoodDiaryEntry.objects.create(
+            user=request.user,
+            food_item = food_item_name,
+            meal_type=meal_type,
+            calories=calories,
+            date=date  # use the date
+        )
+        print(f"Food diary entry created successfully for {food_item_name} at {date} with {calories} calories")
+
+        calorie_summary = get_calorie_summary(request, date_str)  # Get the calorie summary for the provided date
+
+        return {
+            'message': 'Food diary entry created successfully.',
+            'calorie_summary': calorie_summary
+            }
+        
+    else:
+        return {'error': 'Invalid request method.'}
+
 def create_food_diary_entry(request):
-    '''This function takes in a food item, meal type and date_time
+    '''This function takes in a food item, meal type and date
        and creates a food diary entry for the user'''
 
     if request.method == 'POST':
@@ -164,15 +201,22 @@ def create_food_diary_entry(request):
         data = json.loads(request.body)
         food_item_query = data.get('food_item')
         meal_type = data.get('meal_type')
-        date_time = datetime.now()
+        date_str = data.get('date')  # get the date from the request
+        if date_str:
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()  # convert the date string to a date
+        else:
+            date = datetime.now().date()  # use today's date
+        
+        print(f"Food item query received: {food_item_query}")
+        print(f"Meal type received: {meal_type}")
+        print(f"Date received: {date}")
+
 
         # Use get_food_item to retrieve the food's name and calorie count from the Edamam API
         response = get_food_item(request, food_item_query)
 
         # Check if response is a list (meaning multiple food items found)
         if isinstance(response, list):
-            # TODO: sending the list back to the user for selection
-            # For now is selecting first item in list
             food_name = response[0]['name']
             food_calories = response[0]['calories']
         elif 'error' in response:
@@ -182,6 +226,8 @@ def create_food_diary_entry(request):
             # If it's a dictionary (but not an error), proceed as before
             food_name = response['name']
             food_calories = response['calories']
+        
+            print(f"Food item data received from API: Name - {food_name}, Calories - {food_calories}")
 
         if food_name is None or food_calories is None:
             return {'error': f"No information found for {food_item_query}"}
@@ -191,12 +237,17 @@ def create_food_diary_entry(request):
             user=request.user,
             food_item=food_name,
             meal_type=meal_type,
-            calories=food_calories
+            calories=food_calories,
+            date=date # use the date
         )
-        print(f"Food diary entry created successfully for {food_name} at {date_time}")
+        print(f"Food diary entry created successfully for {food_name} at {date} with {food_calories} calories")
 
-        date_str = datetime.now().strftime('%Y-%m-%d')  # Convert datetime to a string in the 'YYYYMMDD' format
+        transaction.commit()
+
+        date_str = date.strftime('%Y-%m-%d')  # Convert date to a string in the 'YYYYMMDD' format
         calorie_summary = get_calorie_summary(request, date_str)  # Get the calorie summary for today
+
+        print(f"Calorie summary received: {calorie_summary}")
 
         return {
             'message': 'Food diary entry created successfully.',
@@ -226,7 +277,7 @@ def get_foods_eaten(request):
             return {'error': 'User not authenticated.'}
         
         # Get the daily entries for the user
-        daily_entries = FoodDiaryEntry.objects.filter(user=request.user, date_time__date=date)
+        daily_entries = FoodDiaryEntry.objects.filter(user=request.user, date=date)
         
         # If no entries found for the provided date throw an error
         if not daily_entries.exists():  # No entries for the provided date
@@ -241,8 +292,10 @@ def get_foods_eaten(request):
             }) # Append foods_eaten object to foods_eaten list
         
         return {
-                'date': date_string,
+                'date': date,
                 'foods_eaten': foods_eaten}  # Wrap the result in a dictionary
+    
+   
 
     else:
         # If request method is not GET throw an error

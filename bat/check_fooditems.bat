@@ -8,4 +8,4 @@ entries = FoodDiaryEntry.objects.all()
 
 # Loop through and print each entry
 for entry in entries:
-    print(entry.food_item, entry.meal_type, entry.calories, entry.date_time)
+    print(entry.food_item, entry.meal_type, entry.calories, entry.date)

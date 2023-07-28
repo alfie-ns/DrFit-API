@@ -13,4 +13,4 @@ class FoodDiaryEntry(models.Model):
     food_item = models.CharField(max_length=255)
     meal_type = models.CharField(max_length=10, choices=MEAL_TYPE_CHOICES)
     calories = models.FloatField()
-    date_time = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)

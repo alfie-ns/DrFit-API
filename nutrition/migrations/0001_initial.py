@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('food_item', models.CharField(max_length=255)),
                 ('meal_type', models.CharField(choices=[('breakfast', 'Breakfast'), ('lunch', 'Lunch'), ('dinner', 'Dinner'), ('snack', 'Snack')], max_length=10)),
                 ('calories', models.FloatField()),
-                ('date_time', models.DateTimeField(auto_now_add=True)),
+                ('date', models.DateTimeField(auto_now_add=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
