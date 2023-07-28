@@ -30,6 +30,7 @@
 - [x] Save initial plan somewhere
 - [ ] Nutritional calorie counter diary
 - [x] Change database password and put in .env file
+- [ ] COMPONENT-STREAMING/LOADING SCREEN FOR API GET RESPONSE
 
 ## Calorie counter idea
 
