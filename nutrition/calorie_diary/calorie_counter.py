@@ -2,14 +2,16 @@ from response.calculations import calculate_calorific_needs, calculate_macronutr
 from django.utils.dateparse import parse_date
 from django.db.models import Sum
 from django.db import transaction
-import requests, json, os
 from dotenv import load_dotenv
 from accounts.models import UserProfile
 from ..models import FoodDiaryEntry # Go backwards twice
+from response.models import Conversation
 from datetime import datetime
+import requests, json, os, openai
 
 # Load the environment variables
 load_dotenv()
+
 
 
 def get_food_search(request):
@@ -162,16 +164,40 @@ def manual_create_food_diary_entry(request):
     '''This function takes in a food item, calories, meal type and date
         and manually creates a food diary entry for the user'''
     
+    conversation, created = Conversation.objects.get_or_create(user=request.user)
+    
     if request.method == 'POST':
         data = json.loads(request.body)
         food_item_name = data.get('food_item_name')
+        print(f"Food item name received: {food_item_name}")
         meal_type = data.get('meal_type')
-        calories = data.get('calories')
+        print(f"Meal type received: {meal_type}")
+        calories = data.get('calories') 
+        print(f"Calories received: {calories}")
+        if calories is None:
+            print("No calories provided, using AI model to get calories")
+            size = data.get('size') # In grams
+            res = openai.ChatCompletion.create(
+                model = "gpt-4",
+                messages = [
+                    {"role": "system", "content": f"""You are going to make an accurate conclusion about the calories of {food_item_name} which is 
+                                                      the size of {size} grams, just respond only with the number of calories in your response."""},
+                ]
+            )
+            print(f"Raw Response: {res['choices'][0]['message']['content']}")  # prints raw response from the model
+            try:
+                calories = int(res['choices'][0]['message']['content'])
+            except ValueError:
+                return {'error': 'Invalid calorie data from AI model.'}
+
         date_str = data.get('date')  # get the date from the request
         if date_str:
+            date_strr = date_str
             date = datetime.strptime(date_str, '%Y-%m-%d').date()  # convert the date string to a date
         else:
             date = datetime.now().date()  # use today's date
+            date_strr = date.strftime('%Y-%m-%d')  # Convert date to a string in the 'YYYYMMDD' format
+        print(f"Date received: {date}")
 
         FoodDiaryEntry.objects.create(
             user=request.user,
@@ -181,8 +207,11 @@ def manual_create_food_diary_entry(request):
             date=date  # use the date
         )
         print(f"Food diary entry created successfully for {food_item_name} at {date} with {calories} calories")
+        conversation.history.append({"role": "system", "content": f"Food diary entry created successfully for {food_item_name} at {date} with {calories} calories"})
 
-        calorie_summary = get_calorie_summary(request, date_str)  # Get the calorie summary for the provided date
+        calorie_summary = get_calorie_summary(request, date_strr)  # Get the calorie summary for the provided date
+
+        conversation.save()
 
         return {
             'message': 'Food diary entry created successfully.',
@@ -195,6 +224,8 @@ def manual_create_food_diary_entry(request):
 def create_food_diary_entry(request):
     '''This function takes in a food item, meal type and date
        and creates a food diary entry for the user'''
+    
+    conversation, created = Conversation.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         #If POST request, get food_item_query and meal_type from app
@@ -249,6 +280,9 @@ def create_food_diary_entry(request):
 
         print(f"Calorie summary received: {calorie_summary}")
 
+        conversation.history.append({"role": "system", "content": f"Food diary entry created successfully for {food_item_query} at {date} with {food_calories} calories"})
+        conversation.save()
+
         return {
             'message': 'Food diary entry created successfully.',
             'calorie_summary': calorie_summary
@@ -300,3 +334,4 @@ def get_foods_eaten(request):
     else:
         # If request method is not GET throw an error
         return {'error': 'Invalid request method.'}
+    
