@@ -1,17 +1,30 @@
 # Path: drFit\response\response_handlers\get_workout.py
 
-'''This file contains the function that will create 
+'''This file contains functions that will create 
    and return a workout to the user.'''
 
 import openai, os, json, tiktoken, requests, time, random, datetime, re
 from accounts.models import UserProfile
 from dotenv import load_dotenv
 from ..models import Conversation
+import http.client
 
 # OpenAI API configuation
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 model="gpt-3.5-turbo"
+
+#GET_EXERCISE
+def get_exercise(exercise_name):
+    conn = http.client.HTTPSConnection("exerciseapi3.p.rapidapi.com")
+    headers = {
+        'X-RapidAPI-Key': os.getenv('RAPID_API_KEY'),
+        'X-RapidAPI-Host': "exerciseapi3.p.rapidapi.com"
+    }
+    conn.request("GET", "/exercise/all", headers=headers)
+    res = conn.getresponse()
+    data = res.read()
+    return data.decode("utf-8")
 
 #GET_WORKOUT
 def get_workout(request):
