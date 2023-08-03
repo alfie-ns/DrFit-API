@@ -1,6 +1,7 @@
 from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi
 from urllib.parse import urlparse, parse_qs
+from django.core.mail import send_mail
 from accounts.models import UserProfile
 from response.models import Conversation
 from dotenv import load_dotenv
@@ -77,7 +78,7 @@ def get_youtube(request):
     # Start the timer
     start_time1 = time.time()
     # Get the AI's interpretations of the chunks
-    responses = []
+    summary = []
     for i, chunk in enumerate(chunks):
         res = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-16k",
@@ -90,9 +91,10 @@ def get_youtube(request):
             ]
         )
         response = res['choices'][0]['message']['content']
-        responses.append(response)
+        summary.append(response)
+        # Join the summaries with a newline separator
+        summary_text = "\n".join(summary)
         conversation.history.append({'role': 'assistant', 'content': response})
-    responses = "<br><br>".join(responses)
     print(f"TIME TAKEN FOR VIDEO TRANSCRIPT GENERATION: {time.time() - start_time1}") # End the timer
 
     # Start the second timer
@@ -114,7 +116,7 @@ def get_youtube(request):
                 Be sure to generate exactly {insight_count} insights that are relevant to the video content. After you finish listing the {insight_count} insights, do not generate any more text. STOP AFTER THE LIST.
                 """
             },
-            {"role": "system", "content": responses}
+            {"role": "system", "content": summary_text}
         ]
     )
     final_response = final_res['choices'][0]['message']['content']

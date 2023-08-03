@@ -1,23 +1,26 @@
 # Path: django-api\response\response_handlers\personal_response.py
 from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi
+from django.core.mail import send_mail
+from accounts.models import  UserProfile
 from urllib.parse import urlparse, parse_qs
 from dotenv import load_dotenv
-import json, os, openai
+import json, os, openai, time
 
 load_dotenv()
 
-personal_prompt = """
-                  You a knowledgable doctor. You are given the transcript 
-                  of a youtube video and must make a list of the different brain nutrients 
-                  that are mentioned in the video. You are given the entire transcript in chunks 
-                  and must generate a list of every single brain nutrient listed in the video transcript.
-                  """
-
 def get_personalised_transcript(request):
 
+    # Get the url from the request body, request body is the 
     data = json.loads(request.body.decode('utf-8'))
     url = data.get('url')
+    user_prompt = data.get('prompt')
+    
+
+    # Get the user profile and goal
+    user_profile = UserProfile.objects.get(user=request.user)
+    user_goal = user_profile.goal 
+    print(f"USER GOAL: {user_goal}")
 
     # Extract video Id from url
     query = urlparse(url)
@@ -37,13 +40,13 @@ def get_personalised_transcript(request):
     response = caption_request.execute()
     english_captions = [item['id'] for item in response['items'] if item['snippet']['language'] == 'en-US']
 
+    start_time = time.time()
     # Get the transcript for the video
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
 
     # Extract the sentences from the transcript
     sentences = [entry['text'] for entry in transcript]
 
-    # Split the sentences into chunks of approximately {insight_count000 tokens each
     chunks = []
     chunk = []
     chunk_size = 0
@@ -63,28 +66,47 @@ def get_personalised_transcript(request):
     if chunk:  # For the last chunk
         chunks.append(" ".join(chunk))
 
-    responses = []
+    summary = []
     for i, chunk in enumerate(chunks):
         res = openai.ChatCompletion.create(
             model = "gpt-4",
             messages = [
-                {"role": "system", "content": personal_prompt},
-                {"role": "system", "content": f"""You are iterating over chunks of one entire youtube video transcript,
-                                                  you are interpreting chunk {i+1} out of {len(chunks)} chunks of the entire video.
+                {"role": "system", "content": f"Start of loop {i+1}"},
+                {"role": "system", "content": f"""
+                                                You are an AI personal doctor who has been asked to extract specific information from a YouTube video transcript.
+                                                The transcript has been divided into multiple chunks, and you must process each chunk individually. 
+                                                Your task is to follow these steps:
+                                                - Review each chunk of the transcript and identify every piece of information that aligns with the given user prompt.
+                                                - After processing all chunks, summarize all the relevant pieces of information you have found in a single response.
+                                                - User's goal: {user_goal}
+
+                                                Your guiding rule, as defined by the user, is: {user_prompt}
+                                            """},
+                {"role": "system", "content": f"""You are iterating over each chunk of single entire youtube video transcript,
+                                                  you are interpreting chunk {i+1} out of {len(chunks)} chunks of the entire video
+                                                  You must give notes about this chunk in regard to the users prompt: ({user_prompt}).
                                                   The next message contains the chunk content."""},
-                {"role": "system", "content": chunk}
+                {"role": "system", "content": f"CHUNK {i+1}: {chunk}"},
+                {"role": "system", "content": f"End of loop {i+1}"},
             ]
         )
         response = res['choices'][0]['message']['content']
-        responses.append(response)
+        summary.append(response)
+        # Join the summaries with a newline separator
+        summary_text = "\n".join(summary)
     
     res2 = openai.ChatCompletion.create(
         model = "gpt-4",
         messages = [
-            {"role": "system", "content": """You are now generating a list of all the brain nutrients you have
-                                             found in the last response where you iterated of the chunks of the video transcript."""},
+            {"role": "system", "content": f"""Your task is now to summarize all the relevant pieces
+                                              of information you have found in a single response.
+             
+                                              Listed summary information: {summary_text}
+                                              Users prompt: {user_prompt}"""},
         ]   
     )
+
+    print(f"TIME TAKEN TO GENERATE RESPONSE: {time.time() - start_time} seconds")
     final_response = res2['choices'][0]['message']['content']
     print(f"FINAL RESPONSE: {final_response}")
     return final_response

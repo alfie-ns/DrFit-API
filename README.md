@@ -42,7 +42,6 @@
 - [ ] Make sure the personal youtube prompter is working
 
 ## Dad
-- [ ] I'm trying to make the calorie counter, now I need to implement functionality for the food item to be taken off the daily calorific needs
 - [ ] Implementing checkboxex
 - [ ] Implementing strava api
 

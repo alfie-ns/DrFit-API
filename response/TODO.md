@@ -1,8 +1,9 @@
 # Response
 
 ## get_personalised_response
-- [ ] Check if it reads over the entire transcript(ask for first and last sentence of transcript)
-- [ ] Implement personalised question post request(prompt_wish json, get chatgpt help?)
+- [x] Check if it reads over the entire transcript(ask for first and last sentence of transcript)
+- [x] Implement personalised question post request(prompt_wish json, get chatgpt help?)
+- [ ] EMAIL INSIGHTS TO USER
 
 ## get_workout
 - [ ] Hook up to API for workout/exercise generation
