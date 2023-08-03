@@ -83,10 +83,13 @@ def get_youtube(request):
         res = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-16k",
             messages=[
-                {"role": "system", "content": "You are a very knowledgeable doctor. You have been tasked with interpreting and summarizing a YouTube video and extracting summarized insights from it."},
+                {"role": "system", "content": """You are a very knowledgeable doctor. You have been tasked with interpreting 
+                                                 and summarizing a YouTube video and extracting summarized insights from each chunk  it."""},
+
                 {"role": "system", "content": f"""You are iterating over chunks of one entire youtube video transcript,
                                                   you are interpreting chunk {i+1} out of {len(chunks)} chunks of the entire video.
                                                   The next message contains the chunk content."""},
+
                 {"role": "system", "content": f"Chunk {i+1}: {chunk}"}
             ]
         )

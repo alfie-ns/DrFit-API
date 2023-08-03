@@ -28,7 +28,7 @@ def get_initial_plan(user_profile):
    ideal_weight = calculate_ideal_body_weight(user_profile.gender, user_profile.height)
    macronutrient_split = calculate_macronutrient_split(user_profile.gender, user_profile.height, user_profile.weight, user_profile.bmr_type, user_profile.activity_level, user_profile.age, user_profile.goal)
 
-   # User profile details as a string
+   # User profile details
    user_profile_details = f"""
    User Profile Details:
    User ID: {user_profile.user.id}
@@ -99,7 +99,7 @@ def get_initial_plan(user_profile):
    formatted in a step-by-step format with checkboxes for each step.
    - An estimated time frame for goal achievement, again based on how determined they are:({user_profile.determination_level}).
    - A motivational quote.
-   - Finally, check what you've send an make sure you've included step-by-step checkboxes for achieving each step and therefore the goal
+   - Finally, check what you've send and make sure you've included step-by-step checkboxes for achieving each step and therefore the goal
 
    Remember do not make your own calculations!!!, they are already done for you, just use the data provided in this prompt.
 
