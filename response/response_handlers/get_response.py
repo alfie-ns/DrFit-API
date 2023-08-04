@@ -1,4 +1,4 @@
-# Path: drFit\response\response_handlers\get_response.py
+# Path: django-api\response\response_handlers\get_response.py
 
 import tiktoken, json, openai, os, time
 from accounts.models import UserProfile

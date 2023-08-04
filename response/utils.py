@@ -1,4 +1,4 @@
-# Path: drfit\response\utils.py
+# Path: django-api\response\utils.py
 
 '''This file contains all the constants used in the response module'''
 

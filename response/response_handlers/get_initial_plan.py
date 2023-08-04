@@ -1,4 +1,4 @@
-# Path: drFit\response\response_handlers\get_response.py
+# Path: django-api\response\response_handlers\get_response.py
 
 '''This file contains the function that will
    create the initial plan for the user.'''

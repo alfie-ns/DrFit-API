@@ -1,4 +1,4 @@
-# Path: drFit\response\views.py
+# Path: django-api\response\views.py
 
 '''This file contains the classes that will handle the POST request from the app.'''
 
