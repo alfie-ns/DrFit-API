@@ -1,5 +1,4 @@
 #!/bin/bash
 
-cd ..
-cd ..
+cd .. cd ..
 python3 manage.py flush

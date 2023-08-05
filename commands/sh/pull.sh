@@ -2,5 +2,5 @@
 
 # Pull repository code 
 
-cd ..
+cd .. cd ..
 git pull origin main
