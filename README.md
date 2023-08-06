@@ -293,29 +293,3 @@ a. User Profile
 b. Data Privacy & Security
 c. Accessibility Options
 d. Logout
-
-
-## Dad
-#### <u>Prompt Engineering</u>
-##### Error regarding user profile(DONE?)
-- I need to put in a argument in the functions to get request in order for the user profile to get gotten, but it needs this parameter for calls to work
-- Function call did work once before the error
-- After resetting database, it started working??
-##### Simple response(DONE)
-- Working on a simple response: UnboundLocalError: local variable 'response' referenced before assignment
-##### Calling functions when shouldn't
-- Calls functions when there's no need to. e.g. **Exception: Unknown activity: drinking** when asking for advice on how many beers to drink
-
-#### <u>User Profile</u>
-##### Extra registeration
-- Working out on how to implement extra registeration advanced functions e.g. **body fat percentage calculation**
-
-#### Notes
-- When I reset database it resolves most issues, however I can't do this when the app is live
-
-
-## Setup
-#### To set up the project:
-1. Create a new Python virtual environment -> **python -m venv venv**
-2. Activate the virtual environment -> **.\venv\Scripts\activate**
-3. Install the required packages using pip -> **pip install -r requirements.txt**
