@@ -13,6 +13,14 @@
 ### 3. Consider Hosting Environment:
    - While running the Django backend on your personal laptop is fine for initial development and testing, moving to a more isolated and controlled environment like a VM, container, or cloud provider is often a wise choice as the project progresses.
    - You can use tools like VirtualBox or Docker, or platforms like AWS, Azure, or Heroku.
+   - **Running Django API on a Virtual Machine**:
+      1. **Set Up the Virtual Machine**: Choose a Virtualization Platform, Create a New VM, Install an OS.
+      2. **Install Dependencies on the VM**: Update the System, Install Python, Install Virtualenv.
+      3. **Prepare the Application**: Transfer Code, Set Up Virtual Environment, Install Django and Dependencies.
+      4. **Configure the Django Application**: Update Allowed Hosts, Configure Database.
+      5. **Run the Django Development Server**: `python manage.py runserver 0.0.0.0:8000`.
+      6. **Access the API from Your Local Machine**: `http://VM_IP_ADDRESS:8000/api/`.
+      7. **Integrate with the Xcode Frontend**: Update the API endpoint in your Xcode project to point to the VM's IP address.
 
 ### 4. Run the Django Development Server:
    - Navigate to the directory where your `manage.py` file is located.
