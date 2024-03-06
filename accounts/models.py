@@ -116,7 +116,7 @@ def send_welcome_email_on_user_create(sender, instance, created, **kwargs):
         fail_silently=False
     )
         
-# Put initial plan function here?  
+# Initial plan on user create function 
 @receiver(post_save, sender=UserProfile)
 def send_initialplan_on_user_create(sender, instance, created, **kwargs):
     if created:
