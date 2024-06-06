@@ -1,7 +1,8 @@
 #!/bin/bash
-current_dir=$(basename "$PWD") # Get current directory name
-if ./push.sh; then 
-cd .. 
-rm -rf "$current_dir" # Run the push script 1st , then back out,
+if ./push.sh; then
+    echo "Pushed successfully"
+    cd ..
+    rm -rf drfit-api # remove the cloned repository
+else
+    echo "Push failed"
 fi
-# Streamline procwaa
